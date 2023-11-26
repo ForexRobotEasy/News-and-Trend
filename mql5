@@ -1,0 +1,124 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                            News and Trend.mq5 |
+//|                     Copyright 2022, Forex Robot Easy Team         |
+//|                                        https://forexroboteasy.com|
+//+------------------------------------------------------------------+
+
+//+------------------------------------------------------------------+
+//|                             Global Variables                      |
+//+------------------------------------------------------------------+
+input double breakeven = 10; // Customizable breakeven level
+int newsImpact = 0; // News impact indicator
+int trendImpact = 0; // Trend impact indicator
+
+//+------------------------------------------------------------------+
+//|                        Expert Advisor Start Function              |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+   // Add initialization code here
+   return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//|                      Expert Advisor Tick Function                 |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+   // Check for news impact
+   if (CheckNewsImpact())
+   {
+      // Execute trading based on news impact
+      ExecuteTrade();
+   }
+   else if (CheckTrendImpact())
+   {
+      // Execute trading based on trend impact
+      ExecuteTrade();
+   }
+}
+
+//+------------------------------------------------------------------+
+//|                       Check News Impact Function                  |
+//+------------------------------------------------------------------+
+bool CheckNewsImpact()
+{
+   // Implement logic to check news impact
+   if (newsImpact > 0)
+   {
+      // News impact detected
+      return true;
+   }
+   else
+   {
+      // No news impact detected
+      return false;
+   }
+}
+
+//+------------------------------------------------------------------+
+//|                       Check Trend Impact Function                 |
+//+------------------------------------------------------------------+
+bool CheckTrendImpact()
+{
+   // Implement logic to check trend impact
+   if (trendImpact > 0)
+   {
+      // Trend impact detected
+      return true;
+   }
+   else
+   {
+      // No trend impact detected
+      return false;
+   }
+}
+
+//+------------------------------------------------------------------+
+//|                          Execute Trade Function                   |
+//+------------------------------------------------------------------+
+void ExecuteTrade()
+{
+   // Implement logic to execute trade
+   // Use technical indicators (Stochastic, RSI, Heiken Ashi) for trading decisions
+   // Use breakeven level for stop-loss adjustment
+   
+   // Example trade execution code
+   double stopLoss = NormalizeDouble(SymbolInfoDouble(_Symbol, SYMBOL_TRADE_STOPS_LEVEL) - breakeven * SymbolInfoDouble(_Symbol, SYMBOL_POINT), Digits);
+   double takeProfit = NormalizeDouble(SymbolInfoDouble(_Symbol, SYMBOL_TRADE_STOPS_LEVEL) + breakeven * SymbolInfoDouble(_Symbol, SYMBOL_POINT), Digits);
+   
+   // Open a Buy trade
+   double lotSize = 0.01;
+   if (OrderSend(_Symbol, OP_BUY, lotSize, Ask, 0, stopLoss, takeProfit, 'Buy Trade', 0, 0, Green) > 0)
+   {
+      // Trade executed successfully
+   }
+   else
+   {
+      // Error handling for trade execution failure
+      Print('Error opening Buy trade: ', GetLastError());
+   }
+}
+
+//+------------------------------------------------------------------+
+//|                       Expert Advisor Deinitialization Function    |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+   // Add deinitialization code here
+}
+
+//+------------------------------------------------------------------+
+//|                     Error Handling Functions                      |
+//+------------------------------------------------------------------+
+void OnTradeError(const int code)
+{
+   // Handle trade errors here
+   Print('Trade error: ', code);
+}
+
+void OnChartEvent(const int id, const long& lparam, const double& dparam, const string& sparam)
+{
+   // Handle chart events here
+}
